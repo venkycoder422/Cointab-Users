@@ -24,7 +24,7 @@ export const HomePage = () => {
     const postuser = (data) => {
         console.log(data);
         const payload = {
-            Id: +(data.id.value.slice(0,2)),
+            id: +(data.id.value.slice(0,2)),
             image: data.picture.thumbnail,
             name: data.name.last,
             email: data.email,
