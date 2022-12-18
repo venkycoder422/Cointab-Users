@@ -1,15 +1,53 @@
-import React from 'react'
+import axios from 'axios'
+import React, { useEffect, useState } from 'react'
 import styled from 'styled-components'
+import { usePagination } from "use-pagination-hook"
 export const UserDetails = () => {
+    const [users, setUsers] = useState([]);
+    const { current, pages, display, next, previous } = usePagination({ items: users, size: 1 })
+    const sorting = (e) => {
+        const sorting = e.target.value;
+        let arr = [...users]
+      
+        console.log("working the sort")
+        if(sorting === "none"){
+            GetUsersData()
+        }
+        if (sorting === "asc") {
+          arr.sort((a,b) => a.name - b.name);
+          setUsers(arr);
+        }
+        if(sorting==="desc") {
+          arr.sort((a,b) => b.name- a.name);
+          setUsers(arr);
+        }
+        
+        console.log(users);
+      }
+      
+      const GetUsersData = ()=>{
+        axios({
+            method: 'get',
+            url: 'http://localhost:3000/users',
+
+        })
+            .then((res) => setUsers(res.data))
+
+            .catch((err) => console.log(err));
+      }
+    useEffect(() => {
+        GetUsersData();
+    }, [])
+    console.log(users);
     return (
         <Container>
             <div className="user-content">
 
                 <div className="filters">
-                    <select>
-                        <option>None</option>
-                        <option>asc</option>
-                        <option>desc</option>
+                    <select onChange={sorting}>                                           
+                        <option value="none">None</option>
+                        <option value="asc">asc</option>
+                        <option value="desc">desc</option>
                     </select>
                 </div>
                 <div className="table-data">
@@ -17,6 +55,7 @@ export const UserDetails = () => {
                         <thead>
                             <tr>
                                 <th>S.No</th>
+                                <th>User</th>
                                 <th>User Name</th>
                                 <th>Emails</th>
                                 <th>Phone No.</th>
@@ -25,24 +64,34 @@ export const UserDetails = () => {
                             </tr>
                         </thead>
                         <tbody>
-                            <tr>
-                                <td>1</td>
-                                <td>VENKY</td>
-                                <td>test@gmail.com</td>
-                                <td>11111111</td>
-                                <td>Male</td>
-                                <td>33</td>
-                            </tr>
+                            
+                                {
+                                    display.map((ele) => (
+                                        <tr>
+                                            <td>{ele.Id}</td>
+                                            <td><img src="https://randomuser.me/api/portraits/thumb/women/21.jpg" alt="" /></td>
+                                            <td>{ele.name}</td>
+                                            <td>{ele.email}</td>
+                                            <td>{ele.cell}</td>
+                                            <td>{ele.gender}</td>
+                                            <td>{ele.age}</td>
+                                        </tr>
+                                    ))
+                                }
 
+
+
+
+                        
                         </tbody>
                     </table>
                 </div>
                 <div className="paginations-content">
                     <div>
-                        <button>Left</button>
+                        <button disabled={current===1} onClick={previous}>Left</button>
                     </div>
                     <div>
-                        <button>Right</button>
+                        <button disabled ={current==pages}onClick={next} >Right</button>
                     </div>
                 </div>
             </div>
@@ -78,14 +127,15 @@ const Container = styled.div`
         font-size:2rem;
     }
     table{
-  background-image: linear-gradient(to right,red,yellow)
+        background-image: linear-gradient(to right,red,yellow)
 
     }
     table,tr,th,td{
         border:2px solid white;
+        text-align:center;
     }
     td{
-        
+    
     }
     .paginations-content{
         display:flex;
@@ -93,5 +143,9 @@ const Container = styled.div`
         button{
             padding:0.6rem;
         }
+    }
+    tbody img{
+        width:100%;
+        height:100%;
     }
 `

@@ -1,10 +1,13 @@
 import React, { useEffect, useState } from 'react'
 import styled from 'styled-components'
 import axios from 'axios';
-import {FaUserPlus,FaUserMinus} from 'react-icons/fa'
-import {CgUserAdd,CgUserList,CgUserRemove} from 'react-icons/cg'
+import {Link} from 'react-router-dom'
+import { FaUserPlus, FaUserMinus } from 'react-icons/fa'
+import { CgUserAdd, CgUserList, CgUserRemove } from 'react-icons/cg'
 export const HomePage = () => {
     const [data, setData] = useState([]);
+
+
 
     const GetUsers = () => {
 
@@ -13,23 +16,44 @@ export const HomePage = () => {
             url: 'https://randomuser.me/api/',
 
         })
-            .then((res) => setData(res.data.results))
+            .then((res) => postuser(res.data.results[0]))
+
             .catch((err) => console.log(err));
+        }
 
-
+    const postuser = (data) => {
+        console.log(data);
+        const payload = {
+            Id: +(data.id.value.slice(0,2)),
+            image: data.picture.thumbnail,
+            name: data.name.last,
+            email: data.email,
+            cell: data.cell,
+            gender: data.gender,
+            age: data.dob.age
+        }
+        axios({
+            method:'post',
+            url:'http://localhost:3000/user',
+            data:payload
+        }).then((response) => {
+            console.log(response);
+          });
     }
 
-    console.log(data[0]);
+    
     return (
         <Container>
             <div className="user">
                 <CgUserAdd />
                 <button onClick={GetUsers}>User</button>
             </div>
+            <Link to='/users'>
             <div className="user-details">
                 <CgUserList />
                 <button>User details</button>
             </div>
+            </Link>
             <div className="delete">
                 <CgUserRemove />
                 <button>User delete</button>
