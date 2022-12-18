@@ -2,9 +2,12 @@ import axios from 'axios'
 import React, { useEffect, useState } from 'react'
 import styled from 'styled-components'
 import { usePagination } from "use-pagination-hook"
+import { HomePage } from './HomePage'
+import { Link } from 'react-router-dom'
+import {FaArrowCircleLeft} from 'react-icons/fa'
 export const UserDetails = () => {
     const [users, setUsers] = useState([]);
-    const { current, pages, display, next, previous } = usePagination({ items: users, size: 1 })
+    const { current, pages, display, next, previous } = usePagination({ items: users, size: 10 })
     const sorting = (e) => {
         const sorting = e.target.value;
         let arr = [...users]
@@ -40,10 +43,12 @@ export const UserDetails = () => {
     }, [])
     console.log(users);
     return (
+        <>
         <Container>
             <div className="user-content">
 
                 <div className="filters">
+                    <Link to='/'><FaArrowCircleLeft /></Link>
                     <select onChange={sorting}>                                           
                         <option value="none">None</option>
                         <option value="asc">asc</option>
@@ -68,8 +73,8 @@ export const UserDetails = () => {
                                 {
                                     display.map((ele) => (
                                         <tr>
-                                            <td>{ele.Id}</td>
-                                            <td><img src="https://randomuser.me/api/portraits/thumb/women/21.jpg" alt="" /></td>
+                                            <td key={ele.id}>{ele.id}</td>
+                                            <td><img src={ele.image} alt="images" /></td>
                                             <td>{ele.name}</td>
                                             <td>{ele.email}</td>
                                             <td>{ele.cell}</td>
@@ -96,6 +101,7 @@ export const UserDetails = () => {
                 </div>
             </div>
         </Container>
+        </>
     )
 }
 
@@ -108,8 +114,11 @@ const Container = styled.div`
     
     .filters{
         display:flex;
-        float:right;
         margin:0.4rem;
+        justify-content:space-between;
+        svg{
+            color:white;
+        };
         select{
             font-weight:bold;
             background-image: linear-gradient(to right,rgba(2,0,36,1) 0%,rgba(97,9,121,1) 48%,rgba(0,212,255,1) 100%);
@@ -145,7 +154,7 @@ const Container = styled.div`
         }
     }
     tbody img{
-        width:100%;
-        height:100%;
+        width:50px;
+        height:50px;
     }
 `

@@ -70,10 +70,12 @@ const Container = styled.div`
     height:100vh;
     background-color:black;
     color:white;
+    position:relative;
     div{
         display:flex;
         flex-direction:column;
         align-items:center;
+        gap:0.5rem;
         svg{
             width:3rem;
             height:3rem;
@@ -82,10 +84,32 @@ const Container = styled.div`
     button{
         background-color:white;
         color:black;
-        
         out-line:none;
         border-radius:0.2rem;
         font-weight:bold;
         font-size:1.4rem;
+    }
+    .user{
+        transition: transform .2s;
+        :hover svg{
+            transform: scale(1.5);
+        }
+    }
+    .user-details{
+        transition: transform .2s;
+        svg{
+            color:white;
+        }
+        :hover svg{
+            transform: scale(1.5);
+        }
+    }
+    .delete{
+        transition: transform .2s;
+       
+        :hover svg{
+            transform: scale(1.5);
+        }
+        
     }
 `
