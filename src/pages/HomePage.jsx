@@ -40,8 +40,6 @@ export const HomePage = () => {
             console.log(response);
           });
     }
-
-    
     return (
         <Container>
             <div className="user">
@@ -61,7 +59,6 @@ export const HomePage = () => {
         </Container>
     )
 }
-
 const Container = styled.div`
     display:flex;
     padding-top:4rem;
